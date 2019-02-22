@@ -82,7 +82,7 @@ The **String Formatting** page illustrates several uses of the `StringFormat` pr
         <StackLayout BindingContext="{x:Static sys:DateTime.Now}">
             <Label Text="{Binding}" />
             <Label Text="{Binding Path=Ticks,
-                                  StringFormat='{0:N0} ticks since 1/1/1'}" />
+                                  StringFormat='{}{0:N0} ticks since 1/1/1'}" />
             <Label Text="{Binding StringFormat='The {{0:MMMM}} specifier produces {0:MMMM}'}" />
             <Label Text="{Binding StringFormat='The long date is {0:D}'}" />
         </StackLayout>
@@ -106,7 +106,14 @@ The next section in the XAML file is a `StackLayout` with a `BindingContext` set
 <Label Text="{Binding}" />
 ```
 
-This simply displays the `DateTime` value of the `BindingContext` with default formatting. The second binding displays the `Ticks` property of `DateTime`, while the other two bindings display the `DateTime` itself with specific formatting. Notice this `StringFormat`:
+This simply displays the `DateTime` value of the `BindingContext` with default formatting. The second binding displays the `Ticks` property of `DateTime`. Since the first character of this format string would start with a left curly brace, it must have a pair of left and right curly braces (`{}`) as an escape sequence first:
+
+```xaml
+<Label Text="{Binding Path=Ticks,
+                      StringFormat='{}{0:N0} ticks since 1/1/1'}" />
+```
+
+If your format string does not need to start with a left curly brace, you can omit these initial curly braces. The other two bindings display the `DateTime` itself with specific formatting. Notice this `StringFormat`:
 
 ```xaml
 <Label Text="{Binding StringFormat='The {{0:MMMM}} specifier produces {0:MMMM}'}" />
